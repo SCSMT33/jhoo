@@ -4,7 +4,7 @@ Reads unscored jobs from Supabase, scores each one using Gemini,
 writes results back. Run this after each Cowork browsing session.
 
 Setup:
-    pip install supabase google-generativeai
+    pip install supabase google-generativeai python-dotenv
 
 Usage:
     python gemini_scorer.py
@@ -14,13 +14,16 @@ import os
 import json
 import hashlib
 from datetime import datetime, timezone
+from dotenv import load_dotenv
 from supabase import create_client
 import google.generativeai as genai
 
+load_dotenv()
+
 # ── CONFIG ──────────────────────────────────────────────────────────────────
-SUPABASE_URL = "https://gjdxhacfqyasprdribaj.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqZHhoYWNmcXlhc3ByZHJpYmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODk0MzUsImV4cCI6MjA5MDQ2NTQzNX0.jjYUqC8xP-IEPMWY6a5KQXTttJrCqtq0M3A9a_Lfsfs"
-GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"  # <-- paste your Gemini key here
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 
 CANDIDATE_PROFILE = """
 Name: Chase Anderson
