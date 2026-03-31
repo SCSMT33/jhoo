@@ -1,5 +1,5 @@
 @echo off
-cd /d "C:\Users\Chase\Documents\GitHub\jhoo"
+cd /d "%~dp0"
 python scraper.py
 python gemini_scorer.py
 pause
