@@ -13,6 +13,7 @@ Usage:
 import os
 import json
 import hashlib
+import time
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 from supabase import create_client
@@ -207,6 +208,7 @@ def score_unscored_jobs():
 
         # Score with Gemini
         result_data = score_job_with_gemini(job, reference_companies)
+        time.sleep(5)
         if result_data:
             score = result_data.get("fit_score", 0)
             print(f"  → Score: {score}/10 — {result_data.get('score_summary','')[:80]}")
