@@ -1,4 +1,6 @@
-flask
 supabase
 python-dotenv
+requests
+feedparser
+flask
 google-generativeai
