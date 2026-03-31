@@ -1,5 +1,5 @@
 @echo off
 cd /d "%~dp0"
-python scraper.py
-python gemini_scorer.py
+C:\Users\%USERNAME%\AppData\Local\Programs\Python\Python313\python.exe scraper.py
+C:\Users\%USERNAME%\AppData\Local\Programs\Python\Python313\python.exe gemini_scorer.py
 pause

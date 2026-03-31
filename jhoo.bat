@@ -1,5 +1,5 @@
 @echo off
 cd /d "%~dp0"
-start cmd /k "cd /d "%~dp0" && python app.py"
-timeout /t 4 /nobreak >nul
+C:\Users\40721\AppData\Local\Programs\Python\Python313\python.exe app.py
+timeout /t 3 /nobreak >nul
 start chrome --profile-directory="Profile 1" http://localhost:5007
