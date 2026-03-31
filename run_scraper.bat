@@ -1,8 +1,5 @@
 @echo off
-cd /d "%~dp0"
-echo Running jhoo scraper...
+cd /d "C:\Users\Chase\Documents\GitHub\jhoo"
 python scraper.py
-echo.
-echo Running Gemini scorer...
 python gemini_scorer.py
 pause
