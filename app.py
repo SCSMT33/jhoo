@@ -18,6 +18,7 @@ Keyboard shortcuts (in browser):
 
 import os
 import sys
+import re
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 from supabase import create_client
@@ -211,14 +212,31 @@ def index():
     return render_template_string(HTML)
 
 
+def strip_html(text):
+    if not text:
+        return ""
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"&nbsp;", " ", text)
+    text = re.sub(r"&amp;", "&", text)
+    text = re.sub(r"&lt;", "<", text)
+    text = re.sub(r"&gt;", ">", text)
+    text = re.sub(r"&quot;", '"', text)
+    text = re.sub(r" {2,}", " ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
 @app.route("/api/jobs")
 def get_jobs():
     show_all = request.args.get("all", "false").lower() == "true"
-    query = supabase.table("jobs").select("*").eq("status", "new").order("fit_score", desc=True)
+    query = supabase.table("jobs").select("*").eq("status", "new").order("fit_score", desc=True).limit(20)
     if not show_all:
         query = query.gte("fit_score", 7)
     result = query.execute()
-    return jsonify(result.data)
+    jobs = result.data
+    for job in jobs:
+        job["raw_description"] = strip_html(job.get("raw_description", ""))
+    return jsonify(jobs)
 
 
 @app.route("/api/jobs/<job_id>/status", methods=["POST"])
