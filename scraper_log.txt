@@ -1,0 +1,202 @@
+Running jhoo scraper Wed 04/01/26  8:03:40.95 
+
+==================================================
+jhoo Scraper — 2026-04-01 08:04
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+  + Inside Sales Contractor @ Credit Wellness, LLC
+
+Remotive: saved 1, skipped 0
+
+==================================================
+Scrape complete. Total new jobs saved: 1
+==================================================
+
+^CRunning jhoo scraper Sat 04/04/26 19:02:37.08 
+
+==================================================
+jhoo Scraper — 2026-04-04 19:02
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+
+Remotive: saved 0, skipped 1
+
+==================================================
+Scrape complete. Total new jobs saved: 0
+==================================================
+
+C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py:20: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+
+==================================================
+jhoo Gemini Scorer — 2026-04-04 19:03
+==================================================
+Loaded 82 avoid companies
+Loaded reference companies for scoring context
+Found 1 unscored jobs
+
+[1/1] Inside Sales Contractor @ Credit Wellness, LLC
+  Gemini error: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+Please retry in 45.946268259s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 45
+}
+]
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 233, in <module>
+    score_unscored_jobs()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 225, in score_unscored_jobs
+    print(f"  \u2192 Gemini failed, skipping")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 2: character maps to <undefined>
+Done Sat 04/04/26 19:03:21.46 
+Running jhoo scraper Sat 04/04/26 19:03:42.27 
+
+==================================================
+jhoo Scraper — 2026-04-04 19:03
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+
+Remotive: saved 0, skipped 1
+
+==================================================
+Scrape complete. Total new jobs saved: 0
+==================================================
+
+C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py:20: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+
+==================================================
+jhoo Gemini Scorer — 2026-04-04 19:03
+==================================================
+Loaded 82 avoid companies
+Loaded reference companies for scoring context
+Found 1 unscored jobs
+
+[1/1] Inside Sales Contractor @ Credit Wellness, LLC
+  Gemini error: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
+Please retry in 11.248018446s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 11
+}
+]
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 233, in <module>
+    score_unscored_jobs()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 225, in score_unscored_jobs
+    print(f"  \u2192 Gemini failed, skipping")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 2: character maps to <undefined>
+Done Sat 04/04/26 19:03:55.92 
