@@ -188,7 +188,7 @@ def score_unscored_jobs():
         if company_lower in avoid_companies:
             print(f"  → SKIPPED (avoid list)")
             supabase.table("jobs").update({
-                "fit_score": 0,
+                "fit_score": None,
                 "score_summary": "Company is on your avoid list — previously rejected or blacklisted.",
                 "status": "skipped",
                 "scored_at": datetime.now(timezone.utc).isoformat()
@@ -201,7 +201,7 @@ def score_unscored_jobs():
         if hard_no:
             print(f"  → HARD NO: {reason}")
             supabase.table("jobs").update({
-                "fit_score": 0,
+                "fit_score": None,
                 "score_summary": f"Auto-filtered: {reason}",
                 "status": "skipped",
                 "scored_at": datetime.now(timezone.utc).isoformat()
@@ -216,7 +216,7 @@ def score_unscored_jobs():
             score = result_data.get("fit_score", 0)
             print(f"  → Score: {score}/10 — {result_data.get('score_summary','')[:80]}")
             supabase.table("jobs").update({
-                "fit_score": score,
+                "fit_score": score if score >= 1 else None,
                 "score_summary": result_data.get("score_summary", ""),
                 "language_flag": result_data.get("language_flag", False),
                 "similar_company_flag": result_data.get("similar_company_flag", False),
