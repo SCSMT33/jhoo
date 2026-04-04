@@ -58,14 +58,14 @@ HTML = """
   #score-badge { font-size: 52px; font-weight: 700; line-height: 1; color: #00d4aa; min-width: 64px; }
   #score-meta { display: flex; flex-direction: column; gap: 4px; }
   #similar-flag { font-size: 12px; font-weight: 700; color: #00d4aa; }
-  #score-summary { font-size: 13px; color: #888; max-width: 620px; line-height: 1.4; }
+  #score-summary { font-size: 15px; color: #888; max-width: 620px; line-height: 1.4; }
 
   /* Card */
   #card { background: #16213e; margin: 0 30px; padding: 20px 24px; border-radius: 4px; flex-shrink: 0; }
   #card.similar { background: #1e3a2f; }
-  #job-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  #job-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
   #job-company { font-size: 14px; color: #888; margin-bottom: 8px; }
-  #job-meta { display: flex; gap: 20px; font-size: 12px; color: #888; align-items: center; }
+  #job-meta { display: flex; gap: 20px; font-size: 14px; color: #888; align-items: center; }
   #job-salary { color: #00d4aa; font-weight: 700; }
   #job-date { color: #888; }
   #job-date.unknown { color: #555; }
@@ -74,11 +74,11 @@ HTML = """
 
   /* Company blurb */
   #blurb-wrapper { margin: 10px 30px 0; flex-shrink: 0; }
-  #blurb-text { background: #16213e; color: #aaa; font-size: 13px; padding: 12px 18px; border-radius: 4px; line-height: 1.6; font-style: italic; }
+  #blurb-text { background: #16213e; color: #aaa; font-size: 15px; padding: 12px 18px; border-radius: 4px; line-height: 1.6; font-style: italic; }
 
   /* Buttons */
   #btn-row { padding: 14px 30px 16px; display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
-  .action-btn { font-family: inherit; font-size: 14px; font-weight: 700; border: none; padding: 10px 28px; border-radius: 4px; cursor: pointer; }
+  .action-btn { font-family: inherit; font-size: 15px; font-weight: 700; border: none; padding: 10px 28px; border-radius: 4px; cursor: pointer; }
   #btn-yes   { background: #00b894; color: white; }
   #btn-maybe { background: #fdcb6e; color: #2d3436; }
   #btn-no    { background: #d63031; color: white; }

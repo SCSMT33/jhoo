@@ -4,3 +4,4 @@ requests
 feedparser
 flask
 groq
+google-generativeai
