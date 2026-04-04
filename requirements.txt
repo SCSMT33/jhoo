@@ -3,4 +3,4 @@ python-dotenv
 requests
 feedparser
 flask
-google-generativeai
+groq

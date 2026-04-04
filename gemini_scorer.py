@@ -1,10 +1,10 @@
 """
-jhoo — Gemini Job Scorer
-Reads unscored jobs from Supabase, scores each one using Gemini,
+jhoo — Job Scorer
+Reads unscored jobs from Supabase, scores each one using Groq,
 writes results back. Run this after each Cowork browsing session.
 
 Setup:
-    pip install supabase google-generativeai python-dotenv
+    pip install supabase groq python-dotenv
 
 Usage:
     python gemini_scorer.py
@@ -17,14 +17,14 @@ import time
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 from supabase import create_client
-import google.generativeai as genai
+from groq import Groq
 
 load_dotenv()
 
 # ── CONFIG ──────────────────────────────────────────────────────────────────
 SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
-GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
+GROQ_API_KEY = os.environ["GROQ_API_KEY"]
 
 CANDIDATE_PROFILE = """
 Name: Chase Anderson
@@ -69,8 +69,7 @@ HARD_NO_REASONS = [
 
 # ── INIT ─────────────────────────────────────────────────────────────────────
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.0-flash-lite")
+client = Groq(api_key=GROQ_API_KEY)
 
 
 def load_avoid_companies():
@@ -90,7 +89,7 @@ def load_reference_companies():
 
 
 def is_hard_no(job):
-    """Quick string check before sending to Gemini — saves API calls."""
+    """Quick string check before sending to Groq — saves API calls."""
     text = (job.get("raw_description", "") + " " + job.get("title", "")).lower()
     for phrase in HARD_NO_REASONS:
         if phrase in text:
@@ -99,7 +98,7 @@ def is_hard_no(job):
 
 
 def score_job_with_gemini(job, reference_companies):
-    """Send job to Gemini, get back score + summary."""
+    """Send job to Groq, get back score + summary."""
     prompt = f"""
 You are a job fit scorer. Score this job posting for the candidate below.
 Return ONLY valid JSON, no markdown, no explanation outside the JSON.
@@ -134,8 +133,12 @@ Return this exact JSON:
 }}
 """
     try:
-        response = model.generate_content(prompt)
-        text = response.text.strip()
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2,
+        )
+        text = response.choices[0].message.content.strip()
         # Strip markdown fences if present
         if text.startswith("```"):
             text = text.split("```")[1]
@@ -143,14 +146,14 @@ Return this exact JSON:
                 text = text[4:]
         return json.loads(text.strip())
     except Exception as e:
-        print(f"  Gemini error: {e}")
+        print(f"  Groq error: {e}")
         return None
 
 
 def score_unscored_jobs():
     """Main loop — fetch unscored jobs, score them, save back."""
     print(f"\n{'='*50}")
-    print(f"jhoo Gemini Scorer — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"jhoo Scorer — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"{'='*50}")
 
     avoid_companies = load_avoid_companies()
@@ -193,7 +196,7 @@ def score_unscored_jobs():
             skipped += 1
             continue
 
-        # Hard no check (no Gemini call needed)
+        # Hard no check (no Groq call needed)
         hard_no, reason = is_hard_no(job)
         if hard_no:
             print(f"  → HARD NO: {reason}")
@@ -206,7 +209,7 @@ def score_unscored_jobs():
             skipped += 1
             continue
 
-        # Score with Gemini
+        # Score with Groq
         result_data = score_job_with_gemini(job, reference_companies)
         time.sleep(5)
         if result_data:
@@ -222,7 +225,7 @@ def score_unscored_jobs():
             }).eq("id", job["id"]).execute()
             scored += 1
         else:
-            print(f"  → Gemini failed, skipping")
+            print(f"  → Groq failed, skipping")
 
     print(f"\n{'='*50}")
     print(f"Done. Scored: {scored} | Auto-skipped: {skipped}")
