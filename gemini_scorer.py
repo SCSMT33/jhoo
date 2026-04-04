@@ -70,7 +70,7 @@ HARD_NO_REASONS = [
 # ── INIT ─────────────────────────────────────────────────────────────────────
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.0-flash-lite")
 
 
 def load_avoid_companies():
