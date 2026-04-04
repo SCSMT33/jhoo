@@ -72,9 +72,9 @@ HTML = """
   #apply-link { margin-left: auto; background: #0f3460; color: #00d4aa; border: 1px solid #00d4aa; padding: 4px 14px; border-radius: 4px; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; }
   #apply-link:hover { background: #00d4aa; color: #1a1a2e; }
 
-  /* Summary */
-  #desc-wrapper { margin: 12px 30px 0; flex-shrink: 0; }
-  #desc-text { background: #16213e; color: #aaa; font-size: 14px; padding: 14px 18px; border-radius: 4px; line-height: 1.6; }
+  /* Company blurb */
+  #blurb-wrapper { margin: 10px 30px 0; flex-shrink: 0; }
+  #blurb-text { background: #16213e; color: #aaa; font-size: 13px; padding: 12px 18px; border-radius: 4px; line-height: 1.6; font-style: italic; }
 
   /* Buttons */
   #btn-row { padding: 14px 30px 16px; display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
@@ -116,8 +116,8 @@ HTML = """
   </div>
 </div>
 
-<div id="desc-wrapper">
-  <div id="desc-text"></div>
+<div id="blurb-wrapper">
+  <div id="blurb-text"></div>
 </div>
 
 <div id="btn-row">
@@ -149,7 +149,7 @@ function loadAll() {
 }
 
 function render() {
-  const mainEls = ['score-row','card','desc-wrapper','btn-row'];
+  const mainEls = ['score-row','card','btn-row'];
   if (idx >= jobs.length) {
     mainEls.forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById('empty').style.display = 'flex';
@@ -192,7 +192,15 @@ function render() {
   const applyLink = document.getElementById('apply-link');
   applyLink.href = job.apply_url || '#';
 
-  document.getElementById('desc-text').textContent = job.score_summary || 'Not yet scored.';
+  const blurb = job.company_blurb || '';
+  const blurbWrapper = document.getElementById('blurb-wrapper');
+  if (blurb) {
+    document.getElementById('blurb-text').textContent = blurb;
+    blurbWrapper.style.display = '';
+  } else {
+    blurbWrapper.style.display = 'none';
+  }
+
   document.getElementById('counter').textContent = (idx + 1) + ' of ' + jobs.length + ' jobs';
 }
 
