@@ -87,13 +87,13 @@ def save_job(title, company_name, location, apply_url, description, source_site,
 
     now = datetime.now(timezone.utc)
 
-    # Date filter: skip jobs older than 14 days
+    # Date filter: skip jobs older than 14 days (only if date is known)
     if date_posted is not None:
         if (now - date_posted).days > CUTOFF_DAYS:
             return "skipped"
         date_posted_iso = date_posted.isoformat()
     else:
-        date_posted_iso = now.isoformat()
+        date_posted_iso = None  # no date available — store NULL, never fabricate
 
     try:
         supabase.table("jobs").insert({

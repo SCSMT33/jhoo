@@ -18,7 +18,6 @@ Keyboard shortcuts (in browser):
 
 import os
 import sys
-import re
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 from supabase import create_client
@@ -66,12 +65,16 @@ HTML = """
   #card.similar { background: #1e3a2f; }
   #job-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
   #job-company { font-size: 14px; color: #888; margin-bottom: 8px; }
-  #job-meta { display: flex; gap: 20px; font-size: 12px; color: #888; }
+  #job-meta { display: flex; gap: 20px; font-size: 12px; color: #888; align-items: center; }
   #job-salary { color: #00d4aa; font-weight: 700; }
+  #job-date { color: #888; }
+  #job-date.unknown { color: #555; }
+  #apply-link { margin-left: auto; background: #0f3460; color: #00d4aa; border: 1px solid #00d4aa; padding: 4px 14px; border-radius: 4px; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; }
+  #apply-link:hover { background: #00d4aa; color: #1a1a2e; }
 
-  /* Description */
-  #desc-wrapper { flex: 1; margin: 12px 30px 0; overflow: hidden; display: flex; flex-direction: column; }
-  #desc-text { background: #16213e; color: #888; font-size: 13px; padding: 14px 18px; border-radius: 4px; overflow-y: auto; flex: 1; white-space: pre-wrap; line-height: 1.55; }
+  /* Summary */
+  #desc-wrapper { margin: 12px 30px 0; flex-shrink: 0; }
+  #desc-text { background: #16213e; color: #aaa; font-size: 14px; padding: 14px 18px; border-radius: 4px; line-height: 1.6; }
 
   /* Buttons */
   #btn-row { padding: 14px 30px 16px; display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
@@ -108,6 +111,8 @@ HTML = """
     <span id="job-location"></span>
     <span id="job-salary"></span>
     <span id="job-source"></span>
+    <span id="job-date"></span>
+    <a id="apply-link" href="#" target="_blank" rel="noopener">Open Job</a>
   </div>
 </div>
 
@@ -172,10 +177,22 @@ function render() {
   document.getElementById('job-company').textContent = job.company_name || '';
   document.getElementById('job-location').textContent = (job.location || '') + (job.remote_type ? '  •  ' + job.remote_type : '');
   document.getElementById('job-salary').textContent = job.salary || '';
-  const date = job.date_collected ? job.date_collected.slice(0,10) : '';
-  document.getElementById('job-source').textContent = (job.source_site ? 'via ' + job.source_site : '') + (date ? '  •  ' + date : '');
-  document.getElementById('desc-text').textContent = job.raw_description || 'No description available.';
-  document.getElementById('desc-text').scrollTop = 0;
+  document.getElementById('job-source').textContent = job.source_site ? 'via ' + job.source_site : '';
+
+  const dateEl = document.getElementById('job-date');
+  if (job.date_posted) {
+    const d = new Date(job.date_posted);
+    dateEl.textContent = 'Posted ' + d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    dateEl.className = '';
+  } else {
+    dateEl.textContent = 'Posted: Unknown';
+    dateEl.className = 'unknown';
+  }
+
+  const applyLink = document.getElementById('apply-link');
+  applyLink.href = job.apply_url || '#';
+
+  document.getElementById('desc-text').textContent = job.score_summary || 'Not yet scored.';
   document.getElementById('counter').textContent = (idx + 1) + ' of ' + jobs.length + ' jobs';
 }
 
@@ -212,20 +229,6 @@ def index():
     return render_template_string(HTML)
 
 
-def strip_html(text):
-    if not text:
-        return ""
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"&nbsp;", " ", text)
-    text = re.sub(r"&amp;", "&", text)
-    text = re.sub(r"&lt;", "<", text)
-    text = re.sub(r"&gt;", ">", text)
-    text = re.sub(r"&quot;", '"', text)
-    text = re.sub(r" {2,}", " ", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text.strip()
-
-
 @app.route("/api/jobs")
 def get_jobs():
     show_all = request.args.get("all", "false").lower() == "true"
@@ -233,10 +236,7 @@ def get_jobs():
     if not show_all:
         query = query.gte("fit_score", 7)
     result = query.execute()
-    jobs = result.data
-    for job in jobs:
-        job["raw_description"] = strip_html(job.get("raw_description", ""))
-    return jsonify(jobs)
+    return jsonify(result.data)
 
 
 @app.route("/api/jobs/<job_id>/status", methods=["POST"])
