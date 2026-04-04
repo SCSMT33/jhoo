@@ -50,8 +50,10 @@ HTML = """
   #header { background: #0f3460; padding: 12px 24px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
   #header h1 { font-size: 22px; font-weight: 700; }
   #counter { font-size: 13px; color: #888; }
-  #load-more-btn { margin-left: auto; background: #6c5ce7; color: white; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: inherit; }
-  #load-more-btn:disabled { opacity: 0.5; cursor: default; }
+  #filter-btns { margin-left: auto; display: flex; gap: 6px; }
+  .filter-btn { background: #1a1a2e; color: #888; border: 1px solid #333; padding: 5px 13px; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 600; }
+  .filter-btn:hover { border-color: #00d4aa; color: #e0e0e0; }
+  .filter-btn.active { background: #00d4aa; color: #1a1a2e; border-color: #00d4aa; }
 
   /* Score row */
   #score-row { padding: 16px 30px 8px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
@@ -93,7 +95,12 @@ HTML = """
 <div id="header">
   <h1>jhoo</h1>
   <span id="counter"></span>
-  <button id="load-more-btn" onclick="loadAll()">Load lower scores (&lt; 7)</button>
+  <div id="filter-btns">
+    <button class="filter-btn active" onclick="setFilter('8plus')">8+</button>
+    <button class="filter-btn" onclick="setFilter('7s')">7s</button>
+    <button class="filter-btn" onclick="setFilter('6s')">6s</button>
+    <button class="filter-btn" onclick="setFilter('5below')">5 &amp; below</button>
+  </div>
 </div>
 
 <div id="score-row">
@@ -124,7 +131,7 @@ HTML = """
   <button class="action-btn" id="btn-yes"   onclick="action('applied')">✓  Apply  [Y]</button>
   <button class="action-btn" id="btn-maybe" onclick="action('maybe')">?  Maybe  [M]</button>
   <button class="action-btn" id="btn-no"    onclick="action('skipped')">✕  Skip   [N]</button>
-  <span id="key-hint">L = load all scores</span>
+  <span id="key-hint">Y / N / M</span>
 </div>
 
 <div id="empty">
@@ -135,17 +142,21 @@ HTML = """
 let jobs = [];
 let idx = 0;
 
-async function loadJobs(all = false) {
-  const res = await fetch('/api/jobs?all=' + all);
+const FILTERS = {
+  '8plus':  {min: 8,  max: 10},
+  '7s':     {min: 7,  max: 7},
+  '6s':     {min: 6,  max: 6},
+  '5below': {min: 1,  max: 5},
+};
+
+async function setFilter(key) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const {min, max} = FILTERS[key];
+  const res = await fetch(`/api/jobs?min=${min}&max=${max}`);
   jobs = await res.json();
   idx = 0;
   render();
-}
-
-function loadAll() {
-  document.getElementById('load-more-btn').disabled = true;
-  document.getElementById('load-more-btn').textContent = 'Showing all scores';
-  loadJobs(true);
 }
 
 function render() {
@@ -222,10 +233,14 @@ document.addEventListener('keydown', e => {
   if (e.key === 'y' || e.key === 'Y') action('applied');
   if (e.key === 'n' || e.key === 'N') action('skipped');
   if (e.key === 'm' || e.key === 'M') action('maybe');
-  if (e.key === 'l' || e.key === 'L') loadAll();
 });
 
-loadJobs();
+// Load default filter (8+) on startup
+(async () => {
+  const res = await fetch('/api/jobs?min=8&max=10');
+  jobs = await res.json();
+  render();
+})();
 </script>
 </body>
 </html>
@@ -239,10 +254,14 @@ def index():
 
 @app.route("/api/jobs")
 def get_jobs():
-    show_all = request.args.get("all", "false").lower() == "true"
-    query = supabase.table("jobs").select("*").eq("status", "new").order("fit_score", desc=True).limit(20)
-    if not show_all:
-        query = query.gte("fit_score", 7)
+    min_score = int(request.args.get("min", 8))
+    max_score = int(request.args.get("max", 10))
+    query = (supabase.table("jobs").select("*")
+             .eq("status", "new")
+             .gte("fit_score", min_score)
+             .lte("fit_score", max_score)
+             .order("fit_score", desc=True)
+             .limit(20))
     result = query.execute()
     return jsonify(result.data)
 
