@@ -18,7 +18,6 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 from supabase import create_client
 import google.generativeai as genai
-from groq import Groq
 
 load_dotenv()
 
@@ -26,7 +25,6 @@ load_dotenv()
 SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 
 CANDIDATE_PROFILE = """
 Name: Chase Anderson
@@ -73,7 +71,6 @@ HARD_NO_REASONS = [
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
-groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 
 def load_avoid_companies():
@@ -101,8 +98,9 @@ def is_hard_no(job):
     return False, None
 
 
-def _build_prompt(job, reference_companies):
-    return f"""
+def score_job_with_gemini(job, reference_companies):
+    """Send job to Gemini, get back score + summary."""
+    prompt = f"""
 You are a job fit scorer. Score this job posting for the candidate below.
 Return ONLY valid JSON, no markdown, no explanation outside the JSON.
 
@@ -135,41 +133,18 @@ Return this exact JSON:
   "similar_company_flag": <true if similar to reference companies, else false>
 }}
 """
-
-
-def _parse_json(text):
-    text = text.strip()
-    if text.startswith("```"):
-        text = text.split("```")[1]
-        if text.startswith("json"):
-            text = text[4:]
-    return json.loads(text.strip())
-
-
-def score_job_with_gemini(job, reference_companies):
-    """Score via Gemini 1.5 Flash, fall back to Groq llama-3.3-70b if Gemini fails."""
-    prompt = _build_prompt(job, reference_companies)
-
-    # Try Gemini first
     try:
         response = model.generate_content(prompt)
-        return _parse_json(response.text)
+        text = response.text.strip()
+        # Strip markdown fences if present
+        if text.startswith("```"):
+            text = text.split("```")[1]
+            if text.startswith("json"):
+                text = text[4:]
+        return json.loads(text.strip())
     except Exception as e:
-        print(f"  Gemini error: {e} — trying Groq fallback")
-
-    # Groq fallback
-    if groq_client:
-        try:
-            response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.2,
-            )
-            return _parse_json(response.choices[0].message.content)
-        except Exception as e:
-            print(f"  Groq error: {e}")
-
-    return None
+        print(f"  Gemini error: {e}")
+        return None
 
 
 def score_unscored_jobs():
