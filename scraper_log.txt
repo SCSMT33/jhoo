@@ -200,3 +200,111 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 2: character maps to <undefined>
 Done Sat 04/04/26 19:03:55.92 
+Running jhoo scraper Sat 04/04/26 20:01:18.64 
+
+==================================================
+jhoo Scraper — 2026-04-04 20:01
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+
+Remotive: saved 0, skipped 1
+
+==================================================
+Scrape complete. Total new jobs saved: 0
+==================================================
+
+
+==================================================
+jhoo Scorer — 2026-04-04 20:01
+==================================================
+Loaded 82 avoid companies
+Loaded reference companies for scoring context
+Found 1 unscored jobs
+
+[1/1] Inside Sales Contractor @ Credit Wellness, LLC
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 236, in <module>
+    score_unscored_jobs()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 217, in score_unscored_jobs
+    print(f"  \u2192 Score: {score}/10 — {result_data.get('score_summary','')[:80]}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 2: character maps to <undefined>
+Done Sat 04/04/26 20:01:32.80 
+Running jhoo scraper Sat 04/04/26 20:02:27.59 
+
+==================================================
+jhoo Scraper — 2026-04-04 20:02
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+
+Remotive: saved 0, skipped 1
+
+==================================================
+Scrape complete. Total new jobs saved: 0
+==================================================
+
+
+==================================================
+jhoo Scorer — 2026-04-04 20:02
+==================================================
+Loaded 82 avoid companies
+Loaded reference companies for scoring context
+Found 1 unscored jobs
+
+[1/1] Inside Sales Contractor @ Credit Wellness, LLC
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 236, in <module>
+    score_unscored_jobs()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 217, in score_unscored_jobs
+    print(f"  \u2192 Score: {score}/10 — {result_data.get('score_summary','')[:80]}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 2: character maps to <undefined>
+Done Sat 04/04/26 20:02:39.75 
+Running jhoo scraper Sat 04/04/26 20:03:07.22 
+
+==================================================
+jhoo Scraper — 2026-04-04 20:03
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+
+Remotive: saved 0, skipped 1
+
+==================================================
+Scrape complete. Total new jobs saved: 0
+==================================================
+
+
+==================================================
+jhoo Scorer — 2026-04-04 20:03
+==================================================
+Loaded 82 avoid companies
+Loaded reference companies for scoring context
+Found 1 unscored jobs
+
+[1/1] Inside Sales Contractor @ Credit Wellness, LLC
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 236, in <module>
+    score_unscored_jobs()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 217, in score_unscored_jobs
+    print(f"  \u2192 Score: {score}/10 — {result_data.get('score_summary','')[:80]}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 2: character maps to <undefined>
+Done Sat 04/04/26 20:03:19.98 
