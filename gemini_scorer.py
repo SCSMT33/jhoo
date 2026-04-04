@@ -153,7 +153,7 @@ Return this exact JSON:
 def score_unscored_jobs():
     """Main loop — fetch unscored jobs, score them, save back."""
     print(f"\n{'='*50}")
-    print(f"jhoo Scorer — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"jhoo Scorer - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"{'='*50}")
 
     avoid_companies = load_avoid_companies()
@@ -186,7 +186,7 @@ def score_unscored_jobs():
 
         # Auto-skip avoid companies
         if company_lower in avoid_companies:
-            print(f"  → SKIPPED (avoid list)")
+            print(f"  -> SKIPPED (avoid list)")
             supabase.table("jobs").update({
                 "fit_score": None,
                 "score_summary": "Company is on your avoid list — previously rejected or blacklisted.",
@@ -199,7 +199,7 @@ def score_unscored_jobs():
         # Hard no check (no Groq call needed)
         hard_no, reason = is_hard_no(job)
         if hard_no:
-            print(f"  → HARD NO: {reason}")
+            print(f"  -> HARD NO: {reason}")
             supabase.table("jobs").update({
                 "fit_score": None,
                 "score_summary": f"Auto-filtered: {reason}",
@@ -214,7 +214,7 @@ def score_unscored_jobs():
         time.sleep(5)
         if result_data:
             score = result_data.get("fit_score", 0)
-            print(f"  → Score: {score}/10 — {result_data.get('score_summary','')[:80]}")
+            print(f"  -> Score: {score}/10 - {result_data.get('score_summary','')[:80]}")
             supabase.table("jobs").update({
                 "fit_score": score if score >= 1 else None,
                 "score_summary": result_data.get("score_summary", ""),
@@ -225,7 +225,7 @@ def score_unscored_jobs():
             }).eq("id", job["id"]).execute()
             scored += 1
         else:
-            print(f"  → Groq failed, skipping")
+            print(f"  -> Groq failed, skipping")
 
     print(f"\n{'='*50}")
     print(f"Done. Scored: {scored} | Auto-skipped: {skipped}")
