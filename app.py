@@ -54,6 +54,9 @@ HTML = """
   .filter-btn { background: #1a1a2e; color: #888; border: 1px solid #333; padding: 5px 13px; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: inherit; font-weight: 600; }
   .filter-btn:hover { border-color: #00d4aa; color: #e0e0e0; }
   .filter-btn.active { background: #00d4aa; color: #1a1a2e; border-color: #00d4aa; }
+  .filter-btn.maybe-btn { border-color: #fdcb6e; color: #fdcb6e; }
+  .filter-btn.maybe-btn:hover { background: #fdcb6e22; }
+  .filter-btn.maybe-btn.active { background: #fdcb6e; color: #2d3436; border-color: #fdcb6e; }
 
   /* Score row */
   #score-row { padding: 16px 30px 8px; display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
@@ -100,6 +103,7 @@ HTML = """
     <button class="filter-btn" onclick="setFilter('7s')">7s</button>
     <button class="filter-btn" onclick="setFilter('6s')">6s</button>
     <button class="filter-btn" onclick="setFilter('5below')">5 &amp; below</button>
+    <button class="filter-btn maybe-btn" onclick="setFilter('maybes')">Maybes</button>
   </div>
 </div>
 
@@ -152,8 +156,14 @@ const FILTERS = {
 async function setFilter(key) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
-  const {min, max} = FILTERS[key];
-  const res = await fetch(`/api/jobs?min=${min}&max=${max}`);
+  let url;
+  if (key === 'maybes') {
+    url = '/api/jobs?status=maybe';
+  } else {
+    const {min, max} = FILTERS[key];
+    url = `/api/jobs?min=${min}&max=${max}`;
+  }
+  const res = await fetch(url);
   jobs = await res.json();
   idx = 0;
   render();
@@ -254,14 +264,21 @@ def index():
 
 @app.route("/api/jobs")
 def get_jobs():
-    min_score = int(request.args.get("min", 8))
-    max_score = int(request.args.get("max", 10))
-    query = (supabase.table("jobs").select("*")
-             .eq("status", "new")
-             .gte("fit_score", min_score)
-             .lte("fit_score", max_score)
-             .order("fit_score", desc=True)
-             .limit(20))
+    status = request.args.get("status", "new")
+    if status == "maybe":
+        query = (supabase.table("jobs").select("*")
+                 .eq("status", "maybe")
+                 .order("fit_score", desc=True)
+                 .limit(20))
+    else:
+        min_score = int(request.args.get("min", 8))
+        max_score = int(request.args.get("max", 10))
+        query = (supabase.table("jobs").select("*")
+                 .eq("status", "new")
+                 .gte("fit_score", min_score)
+                 .lte("fit_score", max_score)
+                 .order("fit_score", desc=True)
+                 .limit(20))
     result = query.execute()
     return jsonify(result.data)
 
