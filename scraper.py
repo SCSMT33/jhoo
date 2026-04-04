@@ -12,7 +12,7 @@ Usage:
 
 import os
 import hashlib
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 from supabase import create_client
 import requests
@@ -71,7 +71,10 @@ def is_skip_location(location: str) -> bool:
     return any(kw in loc for kw in SKIP_LOCATIONS)
 
 
-def save_job(title, company_name, location, apply_url, description, source_site):
+CUTOFF_DAYS = 14
+
+
+def save_job(title, company_name, location, apply_url, description, source_site, date_posted=None):
     """Apply filters and save one job to Supabase. Returns 'saved', 'skipped', or 'error'."""
     if not title or not apply_url:
         return "skipped"
@@ -81,6 +84,16 @@ def save_job(title, company_name, location, apply_url, description, source_site)
         return "skipped"
     if is_skip_location(location):
         return "skipped"
+
+    now = datetime.now(timezone.utc)
+
+    # Date filter: skip jobs older than 14 days
+    if date_posted is not None:
+        if (now - date_posted).days > CUTOFF_DAYS:
+            return "skipped"
+        date_posted_iso = date_posted.isoformat()
+    else:
+        date_posted_iso = now.isoformat()
 
     try:
         supabase.table("jobs").insert({
@@ -93,7 +106,8 @@ def save_job(title, company_name, location, apply_url, description, source_site)
             "raw_description": description,
             "status": "new",
             "posting_hash": posting_hash(apply_url),
-            "date_collected": datetime.now(timezone.utc).isoformat(),
+            "date_collected": now.isoformat(),
+            "date_posted": date_posted_iso,
         }, upsert=False).execute()
         return "saved"
     except Exception as e:
@@ -129,7 +143,12 @@ def scrape_remotive_rss():
             location = entry.get("location", "Remote")
             description = entry.get("summary", "") or entry.get("content", [{}])[0].get("value", "") if entry.get("content") else ""
 
-            result = save_job(title, company_name, location, apply_url, description, "remotive")
+            date_posted = None
+            if entry.get("published_parsed"):
+                import time as _time
+                date_posted = datetime.fromtimestamp(_time.mktime(entry.published_parsed), tz=timezone.utc)
+
+            result = save_job(title, company_name, location, apply_url, description, "remotive", date_posted)
             if result == "saved":
                 saved += 1
                 print(f"  + {title[:60]} @ {company_name}")
@@ -167,7 +186,15 @@ def scrape_himalayas():
         apply_url = (job.get("applicationUrl") or "").strip()
         description = job.get("description") or ""
 
-        result = save_job(title, company_name, location, apply_url, description, "himalayas")
+        date_posted = None
+        raw_date = job.get("createdAt") or job.get("postedAt") or job.get("publishedAt")
+        if raw_date:
+            try:
+                date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
+            except Exception:
+                pass
+
+        result = save_job(title, company_name, location, apply_url, description, "himalayas", date_posted)
         if result == "saved":
             saved += 1
             print(f"  + {title[:60]} @ {company_name}")
@@ -205,7 +232,18 @@ def scrape_remoteok():
         apply_url = (job.get("url") or "").strip()
         description = job.get("description") or ""
 
-        result = save_job(title, company_name, location, apply_url, description, "remoteok")
+        date_posted = None
+        raw_date = job.get("date") or job.get("epoch")
+        if raw_date:
+            try:
+                if isinstance(raw_date, (int, float)):
+                    date_posted = datetime.fromtimestamp(raw_date, tz=timezone.utc)
+                else:
+                    date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
+            except Exception:
+                pass
+
+        result = save_job(title, company_name, location, apply_url, description, "remoteok", date_posted)
         if result == "saved":
             saved += 1
             print(f"  + {title[:60]} @ {company_name}")
@@ -253,7 +291,15 @@ def scrape_adzuna():
             apply_url = (job.get("redirect_url") or "").strip()
             description = job.get("description") or ""
 
-            result = save_job(title, company_name, location, apply_url, description, "adzuna")
+            date_posted = None
+            raw_date = job.get("created")
+            if raw_date:
+                try:
+                    date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
+                except Exception:
+                    pass
+
+            result = save_job(title, company_name, location, apply_url, description, "adzuna", date_posted)
             if result == "saved":
                 saved += 1
                 print(f"  + {title[:60]} @ {company_name}")
