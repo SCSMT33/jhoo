@@ -221,109 +221,157 @@ def scrape_himalayas():
 
 
 def scrape_remoteok():
-    """Scrape RemoteOK API for sales jobs."""
-    url = "https://remoteok.com/api?tag=sales"
-    print(f"Fetching: {url}")
-
+    """Scrape RemoteOK API across multiple sales tags."""
+    tags = ["sales", "account-executive", "business-development"]
     saved = 0
     skipped = 0
 
-    try:
-        resp = requests.get(url, timeout=20, headers={"User-Agent": "jhoo-scraper/1.0"})
-        resp.raise_for_status()
-        data = resp.json()
-    except Exception as e:
-        print(f"  RemoteOK fetch error: {e}")
-        return 0
-
-    # First item is metadata, skip it
-    jobs = data[1:] if len(data) > 1 else []
-    print(f"  Found {len(jobs)} entries")
-
-    for job in jobs:
-        title = (job.get("position") or "").strip()
-        company_name = (job.get("company") or "").strip()
-        location = (job.get("location") or "Remote").strip()
-        apply_url = (job.get("url") or "").strip()
-        description = job.get("description") or ""
-        company_blurb = strip_html(description)[:300].strip() or None
-
-        date_posted = None
-        raw_date = job.get("date") or job.get("epoch")
-        if raw_date:
-            try:
-                if isinstance(raw_date, (int, float)):
-                    date_posted = datetime.fromtimestamp(raw_date, tz=timezone.utc)
-                else:
-                    date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
-            except Exception:
-                pass
-
-        result = save_job(title, company_name, location, apply_url, description, "remoteok", date_posted, company_blurb)
-        if result == "saved":
-            saved += 1
-            print(f"  + {title[:60]} @ {company_name}")
-        else:
-            skipped += 1
-
-    print(f"RemoteOK: saved {saved}, skipped {skipped}")
-    return saved
-
-
-def scrape_adzuna():
-    """Scrape Adzuna API across European countries for sales AE jobs."""
-    if not ADZUNA_APP_ID or not ADZUNA_APP_KEY:
-        print("Adzuna: skipping (ADZUNA_APP_ID / ADZUNA_APP_KEY not set in .env)")
-        return 0
-
-    countries = ["gb", "nl", "pl", "at", "ch", "be"]
-    saved = 0
-    skipped = 0
-
-    for country in countries:
-        url = (
-            f"https://api.adzuna.com/v1/api/jobs/{country}/search/1"
-            f"?app_id={ADZUNA_APP_ID}&app_key={ADZUNA_APP_KEY}"
-            f"&results_per_page=50&what=sales+account+executive"
-            f"&content-type=application/json"
-        )
-        print(f"Fetching Adzuna [{country.upper()}]: {url[:80]}...")
+    for tag in tags:
+        url = f"https://remoteok.com/api?tag={tag}"
+        print(f"Fetching: {url}")
 
         try:
-            resp = requests.get(url, timeout=20)
+            resp = requests.get(url, timeout=20, headers={"User-Agent": "jhoo-scraper/1.0"})
             resp.raise_for_status()
             data = resp.json()
         except Exception as e:
-            print(f"  Adzuna [{country}] fetch error: {e}")
+            print(f"  RemoteOK [{tag}] fetch error: {e}")
             continue
 
-        jobs = data.get("results", [])
+        # First item is metadata, skip it
+        jobs = data[1:] if len(data) > 1 else []
         print(f"  Found {len(jobs)} entries")
 
         for job in jobs:
-            title = (job.get("title") or "").strip()
-            company_name = (job.get("company", {}).get("display_name") or "").strip()
-            location = (job.get("location", {}).get("display_name") or "").strip()
-            apply_url = (job.get("redirect_url") or "").strip()
+            title = (job.get("position") or "").strip()
+            company_name = (job.get("company") or "").strip()
+            location = (job.get("location") or "Remote").strip()
+            apply_url = (job.get("url") or "").strip()
             description = job.get("description") or ""
             company_blurb = strip_html(description)[:300].strip() or None
 
             date_posted = None
-            raw_date = job.get("created")
+            raw_date = job.get("date") or job.get("epoch")
             if raw_date:
                 try:
-                    date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
+                    if isinstance(raw_date, (int, float)):
+                        date_posted = datetime.fromtimestamp(raw_date, tz=timezone.utc)
+                    else:
+                        date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
                 except Exception:
                     pass
 
-            result = save_job(title, company_name, location, apply_url, description, "adzuna", date_posted, company_blurb)
+            result = save_job(title, company_name, location, apply_url, description, "remoteok", date_posted, company_blurb)
             if result == "saved":
                 saved += 1
                 print(f"  + {title[:60]} @ {company_name}")
             else:
                 skipped += 1
 
+    print(f"RemoteOK: saved {saved}, skipped {skipped}")
+    return saved
+
+
+def scrape_adzuna():
+    """Scrape Adzuna API across European countries for sales roles."""
+    if not ADZUNA_APP_ID or not ADZUNA_APP_KEY:
+        print("Adzuna: skipping (ADZUNA_APP_ID / ADZUNA_APP_KEY not set in .env)")
+        return 0
+
+    countries = ["gb", "nl", "ie", "se", "dk", "es"]
+    search_terms = ["sales+account+executive", "head+of+sales", "business+development+manager"]
+    saved = 0
+    skipped = 0
+
+    for country in countries:
+        for search_term in search_terms:
+            url = (
+                f"https://api.adzuna.com/v1/api/jobs/{country}/search/1"
+                f"?app_id={ADZUNA_APP_ID}&app_key={ADZUNA_APP_KEY}"
+                f"&results_per_page=50&what={search_term}"
+                f"&content-type=application/json"
+            )
+            print(f"Fetching Adzuna [{country.upper()}] '{search_term}': ...")
+
+            try:
+                resp = requests.get(url, timeout=20)
+                resp.raise_for_status()
+                data = resp.json()
+            except Exception as e:
+                print(f"  Adzuna [{country}/{search_term}] fetch error: {e}")
+                continue
+
+            jobs = data.get("results", [])
+            print(f"  Found {len(jobs)} entries")
+
+            for job in jobs:
+                title = (job.get("title") or "").strip()
+                company_name = (job.get("company", {}).get("display_name") or "").strip()
+                location = (job.get("location", {}).get("display_name") or "").strip()
+                apply_url = (job.get("redirect_url") or "").strip()
+                description = job.get("description") or ""
+                company_blurb = strip_html(description)[:300].strip() or None
+
+                date_posted = None
+                raw_date = job.get("created")
+                if raw_date:
+                    try:
+                        date_posted = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
+                    except Exception:
+                        pass
+
+                result = save_job(title, company_name, location, apply_url, description, "adzuna", date_posted, company_blurb)
+                if result == "saved":
+                    saved += 1
+                    print(f"  + {title[:60]} @ {company_name}")
+                else:
+                    skipped += 1
+
     print(f"Adzuna: saved {saved}, skipped {skipped}")
+    return saved
+
+
+def scrape_wellfound():
+    """Scrape Wellfound (AngelList) for remote sales jobs."""
+    url = "https://wellfound.com/jobs/sales"
+    print(f"Fetching: {url}")
+
+    saved = 0
+    skipped = 0
+
+    try:
+        resp = requests.get(url, timeout=20, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception as e:
+        print(f"  Wellfound fetch error: {e}")
+        return 0
+
+    # Wellfound may return a top-level list or a dict with a jobs key
+    if isinstance(data, list):
+        jobs = data
+    else:
+        jobs = data.get("jobs") or data.get("data") or data.get("results") or []
+
+    print(f"  Found {len(jobs)} entries")
+
+    for job in jobs:
+        title = (job.get("title") or job.get("role") or "").strip()
+        company = job.get("company") or job.get("startup") or {}
+        company_name = (company.get("name") if isinstance(company, dict) else str(company)).strip()
+        location = (job.get("location") or job.get("remote") or "Remote").strip()
+        apply_url = (job.get("url") or job.get("apply_url") or job.get("job_url") or "").strip()
+        description = job.get("description") or job.get("body") or ""
+        company_blurb = strip_html(description)[:300].strip() or None
+
+        result = save_job(title, company_name, location, apply_url, description, "wellfound", None, company_blurb)
+        if result == "saved":
+            saved += 1
+            print(f"  + {title[:60]} @ {company_name}")
+        else:
+            skipped += 1
+
+    print(f"Wellfound: saved {saved}, skipped {skipped}")
     return saved
 
 
@@ -338,6 +386,8 @@ def main():
     total += scrape_himalayas()
     print()
     total += scrape_remoteok()
+    print()
+    total += scrape_wellfound()
     print()
     total += scrape_adzuna()
 
