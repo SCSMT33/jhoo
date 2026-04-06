@@ -151,6 +151,7 @@ function tryCapture() {
   capturedJobs.push(job);
   lastCapturedUrl = job.apply_url;
   updateButton();
+  flashButton();
   console.log(`[jhoo] Captured #${capturedJobs.length}: ${job.title} @ ${job.company_name}`);
 }
 
@@ -184,6 +185,13 @@ function createButton() {
 function updateButton() {
   if (!harvestBtn) return;
   harvestBtn.textContent = `⚡ jhoo: ${capturedJobs.length} captured`;
+}
+
+function flashButton() {
+  if (!harvestBtn) return;
+  harvestBtn.style.transition = "background-color 0.3s ease";
+  harvestBtn.style.background = "#3b82f6";
+  setTimeout(() => { harvestBtn.style.background = "#22c55e"; }, 300);
 }
 
 function setButtonState(text, color, resetAfterMs) {
