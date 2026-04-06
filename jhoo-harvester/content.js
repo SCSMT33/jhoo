@@ -230,51 +230,69 @@ async function harvest() {
   }
 
   const now = new Date().toISOString();
-  const payload = capturedJobs.map(job => ({
-    title: job.title,
-    company_name: job.company_name,
-    location: job.location || "Remote",
-    remote_type: "remote",
-    raw_description: job.raw_description,
-    apply_url: job.apply_url,
-    source_site: "linkedin",
-    status: "new",
-    date_collected: now,
-    date_posted: job.date_posted || null,
-    posting_hash: hashUrl(job.apply_url)
-  }));
+  const jobs = capturedJobs.slice();
+  setButtonState(`Sending 0/${jobs.length}...`, "#6c5ce7", null);
 
-  setButtonState("Sending...", "#6c5ce7", null);
+  let sent = 0;
+  let dupes = 0;
+  let errors = 0;
 
-  try {
-    const resp = await fetch(SUPABASE_URL, {
-      method: "POST",
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization": `Bearer ${SUPABASE_KEY}`,
-        "Content-Type": "application/json",
-        "Prefer": "resolution=ignore-duplicates"
-      },
-      body: JSON.stringify(payload)
-    });
+  for (let i = 0; i < jobs.length; i++) {
+    const job = jobs[i];
+    harvestBtn.textContent = `Sending ${i + 1}/${jobs.length}...`;
 
-    if (!resp.ok) {
-      const errText = await resp.text();
-      console.error("[jhoo] Supabase error:", errText);
-      let msg = errText;
-      try { msg = JSON.parse(errText).message || errText; } catch (_) {}
-      throw new Error(msg);
+    const record = {
+      title: job.title,
+      company_name: job.company_name,
+      location: job.location || "Remote",
+      remote_type: "remote",
+      raw_description: job.raw_description,
+      apply_url: job.apply_url,
+      source_site: "linkedin",
+      status: "new",
+      date_collected: now,
+      date_posted: job.date_posted || null,
+      posting_hash: hashUrl(job.apply_url)
+    };
+
+    try {
+      const resp = await fetch(SUPABASE_URL, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "resolution=ignore-duplicates,return=minimal"
+        },
+        body: JSON.stringify(record)
+      });
+
+      if (resp.status === 200 || resp.status === 201) {
+        sent++;
+      } else if (resp.status === 409) {
+        dupes++;
+      } else if (resp.ok) {
+        // 204 No Content with ignore-duplicates means it was a dupe
+        dupes++;
+      } else {
+        const errText = await resp.text();
+        let msg = errText;
+        try { msg = JSON.parse(errText).message || errText; } catch (_) {}
+        console.error(`[jhoo] Error on "${job.title}":`, msg);
+        errors++;
+      }
+    } catch (e) {
+      console.error(`[jhoo] Network error on "${job.title}":`, e);
+      errors++;
     }
-
-    const count = capturedJobs.length;
-    capturedJobs = [];
-    lastCapturedUrl = null;
-    setButtonState(`✅ jhoo: ${count} sent!`, "#0f9960", 3000);
-  } catch (e) {
-    console.error("[jhoo] Harvest failed:", e);
-    const msg = (e.message || "Unknown error").slice(0, 80);
-    setButtonState(`❌ ${msg}`, "#d63031", 5000);
   }
+
+  capturedJobs = [];
+  lastCapturedUrl = null;
+
+  let toast = `✅ ${sent} sent, ${dupes} dupes skipped`;
+  if (errors > 0) toast += `, ${errors} errors`;
+  setButtonState(toast, "#0f9960", 4000);
 }
 
 // ── OBSERVER ──────────────────────────────────────────────────────────────────
