@@ -192,6 +192,22 @@ function flashButton() {
   harvestBtn.style.transition = "background-color 0.3s ease";
   harvestBtn.style.background = "#ef4444";
   setTimeout(() => { harvestBtn.style.background = "#22c55e"; }, 300);
+
+  // Ding using Web Audio API — no external file needed
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1046, ctx.currentTime);       // C6
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.4);
+    osc.onended = () => ctx.close();
+  } catch (_) {}
 }
 
 function setButtonState(text, color, resetAfterMs) {
