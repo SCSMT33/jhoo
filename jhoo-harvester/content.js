@@ -19,17 +19,50 @@ function hashUrl(url) {
 
 // ── URL ───────────────────────────────────────────────────────────────────────
 function getCurrentJobUrl() {
-  // LinkedIn job detail pages: /jobs/view/1234567890/
+  // 1. Look for an <a> with /jobs/view/ href inside the detail panel
+  const detailPanel = document.querySelector(
+    ".jobs-search__job-details--wrapper, .jobs-details, .job-details-jobs-unified-top-card__container, [data-view-name='job-details']"
+  );
+  if (detailPanel) {
+    const link = detailPanel.querySelector("a[href*='/jobs/view/']");
+    if (link) {
+      const m = link.href.match(/\/jobs\/view\/(\d+)/);
+      if (m) return `https://www.linkedin.com/jobs/view/${m[1]}/`;
+    }
+  }
+
+  // 2. Active job card in the left list — data-job-id attribute
+  const activeCard = document.querySelector(
+    ".job-card-container--active[data-job-id], .jobs-search-results__list-item--active [data-job-id], [data-job-id][aria-selected='true'], .scaffold-layout__list-item.active [data-job-id], .job-card-list__entity-lockup[data-job-id]"
+  );
+  if (activeCard) {
+    const jobId = activeCard.dataset.jobId || activeCard.getAttribute("data-job-id");
+    if (jobId) return `https://www.linkedin.com/jobs/view/${jobId}/`;
+  }
+
+  // 3. Any element in the left list with data-job-id that is selected/focused
+  const anyCard = document.querySelector("[data-job-id]");
+  if (anyCard) {
+    // Walk up to find the selected card
+    const selected = document.querySelector(".jobs-search-results__list-item--active, [aria-selected='true']");
+    if (selected) {
+      const cardEl = selected.querySelector("[data-job-id]") || selected.closest("[data-job-id]");
+      if (cardEl) {
+        const jobId = cardEl.dataset.jobId || cardEl.getAttribute("data-job-id");
+        if (jobId) return `https://www.linkedin.com/jobs/view/${jobId}/`;
+      }
+    }
+  }
+
+  // 4. URL path for direct /jobs/view/ pages
   const viewMatch = window.location.pathname.match(/\/jobs\/view\/(\d+)/);
   if (viewMatch) return `https://www.linkedin.com/jobs/view/${viewMatch[1]}/`;
 
-  // LinkedIn search with currentJobId param: ?currentJobId=1234567890
-  const params = new URLSearchParams(window.location.search);
-  const jobId = params.get("currentJobId");
+  // 5. currentJobId query param (search page)
+  const jobId = new URLSearchParams(window.location.search).get("currentJobId");
   if (jobId) return `https://www.linkedin.com/jobs/view/${jobId}/`;
 
-  // Fallback: full href (unique per job even if ugly)
-  return window.location.href;
+  return null;
 }
 
 // ── SELECTORS ─────────────────────────────────────────────────────────────────
@@ -45,6 +78,9 @@ function getText(selectors, root = document) {
 
 function extractJob() {
   const applyUrl = getCurrentJobUrl();
+
+  // Can't determine job URL yet — detail panel not ready
+  if (!applyUrl) return null;
 
   // Only skip if this is the exact same job we just captured
   if (applyUrl === lastCapturedUrl) return null;
