@@ -8,6 +8,8 @@ let capturedJobs = [];
 let harvestBtn = null;
 let debounceTimer = null;
 let lastCapturedUrl = null;
+let observerInstance = null;
+let currentUrl = window.location.href;
 
 // ── HASH ──────────────────────────────────────────────────────────────────────
 function hashUrl(url) {
@@ -235,7 +237,9 @@ async function harvest() {
     if (!resp.ok) {
       const errText = await resp.text();
       console.error("[jhoo] Supabase error:", errText);
-      throw new Error(errText);
+      let msg = errText;
+      try { msg = JSON.parse(errText).message || errText; } catch (_) {}
+      throw new Error(msg);
     }
 
     const count = capturedJobs.length;
@@ -244,22 +248,47 @@ async function harvest() {
     setButtonState(`✅ jhoo: ${count} sent!`, "#0f9960", 3000);
   } catch (e) {
     console.error("[jhoo] Harvest failed:", e);
-    setButtonState("❌ Error — check console", "#d63031", 3000);
+    const msg = (e.message || "Unknown error").slice(0, 80);
+    setButtonState(`❌ ${msg}`, "#d63031", 5000);
   }
 }
 
 // ── OBSERVER ──────────────────────────────────────────────────────────────────
 function startObserver() {
-  const observer = new MutationObserver(() => {
+  if (observerInstance) observerInstance.disconnect();
+
+  observerInstance = new MutationObserver(() => {
+    // Re-inject harvest button if LinkedIn removed it during page navigation
+    if (!document.getElementById("jhoo-harvest-btn")) {
+      harvestBtn = createButton();
+    }
     // Debounce: wait 1500ms after last mutation before attempting capture
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(tryCapture, 1500);
   });
 
-  observer.observe(document.body, {
+  observerInstance.observe(document.body, {
     childList: true,
     subtree: true
   });
+}
+
+// ── URL WATCHER ───────────────────────────────────────────────────────────────
+function watchUrlChanges() {
+  setInterval(() => {
+    if (window.location.href === currentUrl) return;
+    currentUrl = window.location.href;
+
+    // Re-inject button if it was removed by the SPA navigation
+    if (!document.getElementById("jhoo-harvest-btn")) {
+      harvestBtn = createButton();
+    } else {
+      harvestBtn = document.getElementById("jhoo-harvest-btn");
+    }
+
+    // Restart observer so it is properly attached after DOM changes
+    startObserver();
+  }, 2000);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
@@ -267,6 +296,7 @@ function init() {
   if (document.getElementById("jhoo-harvest-btn")) return;
   harvestBtn = createButton();
   startObserver();
+  watchUrlChanges();
   // Attempt initial capture in case a job is already showing
   setTimeout(tryCapture, 2000);
 }
