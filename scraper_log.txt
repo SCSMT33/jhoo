@@ -1283,3 +1283,296 @@ Done. Scored: 68 | Auto-skipped: 6
 ==================================================
 
 Done Sat 04/04/26 20:36:33.73 
+Running jhoo scraper Mon 04/06/26 16:34:52.30 
+
+==================================================
+jhoo Scraper - 2026-04-06 16:34
+==================================================
+
+Fetching: https://remotive.com/remote-jobs/sales-business/feed
+  Found 1 entries
+Remotive RSS: saved 0, skipped 1
+
+Fetching: https://himalayas.app/jobs/api?q=sales&limit=100
+  Found 20 entries
+Himalayas: saved 0, skipped 20
+
+Fetching: https://remoteok.com/api?tag=sales
+  Found 99 entries
+Fetching: https://remoteok.com/api?tag=account-executive
+  Found 0 entries
+Fetching: https://remoteok.com/api?tag=business-development
+  Found 0 entries
+RemoteOK: saved 0, skipped 99
+
+Fetching: https://wellfound.com/jobs/sales
+  Wellfound fetch error: 403 Client Error: Forbidden for url: https://wellfound.com/jobs/sales
+
+Fetching: https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss
+  Found 51 entries
+  + Binance: DACH Community Manager (Events) @ Unknown
+  + Alcohol-Free Lifestyle: Revenue Operations Coordinator @ Unknown
+  + Committee for Children: Inside Sales Representative @ Unknown
+  + TestGorilla: Revenue Operations Manager @ Unknown
+  + Close: Customer Success Associate @ Unknown
+  + Visible: Senior Account Executive (Remote - SF - NYC - Bosto @ Unknown
+We Work Remotely: saved 6, skipped 45
+
+Fetching: https://jobicy.com/api/v2/remote-jobs?count=100&tag=account+executive
+  Jobicy [account+executive] fetch error: 403 Client Error: Forbidden for url: https://jobicy.com/api/v2/remote-jobs?count=100&tag=account+executive
+Fetching: https://jobicy.com/api/v2/remote-jobs?count=100&tag=sales+manager
+  Jobicy [sales+manager] fetch error: 403 Client Error: Forbidden for url: https://jobicy.com/api/v2/remote-jobs?count=100&tag=sales+manager
+Fetching: https://jobicy.com/api/v2/remote-jobs?count=100&tag=business+development
+  Jobicy [business+development] fetch error: 403 Client Error: Forbidden for url: https://jobicy.com/api/v2/remote-jobs?count=100&tag=business+development
+Jobicy: saved 0, skipped 0
+
+Fetching: https://jobscollider.com/rss/jobs/sales
+  Found 0 entries
+Fetching: https://jobscollider.com/rss/jobs/business-development
+  Found 0 entries
+JobsCollider: saved 0, skipped 0
+
+Fetching Adzuna [GB] 'sales+account+executive': ...
+  Found 50 entries
+  + Sales Account Executive - Events @ Get Staffed Online Recruitment
+  + Sales Account Executive @ JR Personnel
+  + Sales Rep / Account Executive - Freight Forwarding @ Brook Street UK
+Fetching Adzuna [GB] 'head+of+sales': ...
+  Found 50 entries
+  + Head of Sales @ Technical Prospects Ltd
+  + Head of Sales @ Strive Supply Chain Services Ltd
+  + Head of Sales @ BRIGHT EXECUTIVE RECRUITMENT
+  + Head of Sales @ Corecruitment International
+  + Head of Sales @ Urban Food Fest
+  + Head of Sales @ Anthem Consulting
+  + Head of Sales - @ Wilde
+  + Head of Sales - South @ Equals One Ltd
+  + Head of Sales - London @ St Martins Lane Hotel
+  + Head of Sales (German Speaking) @ Euro Car Parks
+  + Head of Commercial Sales @ Headford Group
+  + Head of B2B Sales @ Protein Works
+  + Head of Sales @ Cast UK Limited
+  + Head of Sales @ ARV Solutions
+  + Head of Sales @ Universal Business Team
+  + Head of Sales @ Rayner Personnel Property
+  + Head of Sales @ Robert Half
+  + Head of Sales @ Valsoft Corporation
+  + Head of Sales @ Valsoft Corporation
+  + Head of Sales @ Valsoft Corporation
+  + Head of Sales @ Technical Prospects Ltd
+  + Head of Sales @ Strive Supply Chain
+  + Head Of Sales @ JAB Group
+  + Head of Sales @ ARV Solutions Contracts
+  + Head of Sales @ BMS Performance
+  + Head of Sales @ Pybus Recruitment
+  + Head of Sales @ Strive Supply Chain
+  + Head of Sales @ Strive Supply Chain Services Ltd
+Fetching Adzuna [GB] 'business+development+manager': ...
+  Found 50 entries
+  + EMEA Business Development Manager @ Arrow Electronics, Inc.
+  + Business Development Manager @ Wolseley
+  + Business Development Manager @ ALS Recruiting Solutions
+  + Business Development Manager @ Venatu Recruitment Group
+  + Business Development Manager @ WEC GROUP LIMITED
+  + Business Development Manager @ Accelero
+  + Business Development Manager @ Verelogic Recruitment
+  + Business Development Manager @ VIQU IT Recruitment
+  + Business Development Manager @ Fresh People Ltd
+  + Business Development Manager @ Altius Group
+  + Business Development Manager @ Forward Role
+  + Business Development Manager @ phs Group
+  + Business Development Manager @ Red Rock Consultants
+  + Business Development Manager @ Gold Group
+  + Business Development Manager @ UPPERTON LIMITED
+  + Business Development Manager @ Corecruitment International
+  + Business Development Manager @ Venatu Recruitment Group
+  + Business Development Manager @ WALLACE HIND SELECTION LIMITED
+  + Business Development Manager @ WALLACE HIND SELECTION LIMITED
+  + Business Development Manager @ Mobile Data Collection
+  + Business Development Manager @ WR Engineering
+  + Business Development Manager @ WR Logistics
+  + Business Development Manager @ O'Kane Resourcing
+Fetching Adzuna [DE] 'sales+account+executive': ...
+  Found 50 entries
+  + Enterprise Sales / Account Executive (all genders) | Climate @ carbmee GmbH
+  + Inside Sales Account Executive - Dein Einstieg in IT-Sales @ Dell Technologies
+  + Inside Sales Account Executive - Dein Einstieg in IT-Sales @ Dell Technologies
+  + Account Executive / Sales Manager (m/w/d) in NRW @ BonFry
+  + Account Executive Sales (m/w/d) – SaaS Lösungen im Maschinen @ Murrelektronik GmbH
+  + Mitarbeiter im Vertrieb: Business Development Manager (BDM)  @ TOPdesk Deutschland GmbH
+  + Enterprise Account Executive - B2B Sales / HubSpot / Forecas @ Workwise GmbH
+  + Sales Manager / Account Executive - B2B SaaS (m/w/d) @ Peter Park
+Fetching Adzuna [DE] 'head+of+sales': ...
+  Found 50 entries
+  + Head of Sales Support & TPI Operations (m/f/d) @ Xenios AG
+  + Head of Sales (m/w/d) @ Schmieder GmbH
+  + Bereichsleitung Vertrieb / Marketing / Head of Marketing & S @ BKK Diakonie
+  + Trainer für Vertriebstrainings (m/w/d) @ GRIMME Landmaschinenfabrik SE & Co. KG
+  + Head of Sales (gn) @ Elettronica GmbH
+  + Head Of Sales DACH @ Sabre
+  + Head of Service Sales (w/m/d) - Inklusiver Job @ Siemens Industry Software GmbH
+  + Senior Sales Manager - Outbound Sales B2B (m/w/d) für Cowork @ Scaling Spaces GmbH
+  + Head of Sales (all genders) @ WhiteWall Media
+  + Head of Sales (m/w/d)* @ XL2
+  + Head of Sales (Relocation to Malta) @ TechBiz Global GmbH
+  + Head of Sales (Relocation to Malta) @ TechBiz Global GmbH
+  + Head of Sales (Relocation to Malta) @ TechBiz Global GmbH
+Fetching Adzuna [DE] 'business+development+manager': ...
+  Found 50 entries
+  + Sales- und Business-Development Manager (m/w/d) @ Arevipharma GmbH
+  + Sales & Business Development Manager (all genders) @ DATAGROUP
+  + Business Development Manager - Windenergie (m/w/d) (m/w/d) @ Hays – Working for your tomorrow
+  + Business Development Manager (m/w/d) - Krankenhaus- & Heimga @ Hupfer Metallwerke GmbH & Co. KG
+  + Senior Business Development Manager (m/w/d) – AI & Hiring-as @ The Stepstone Group GmbH
+  + Business Development Manager (m/w/d) für den Bereich Militar @ Northrop Grumman LITEF GmbH
+  + Business Development Manager (m/w/d) Vertrieb Supermärkte &  @ Biddle GmbH
+  + Business Development Manager (m/w/d) Vertrieb Supermärkte &  @ Biddle GmbH
+  + Sales & Business Development Manager Tree Care (w/m/d) @ PRINOTH GmbH
+  + Senior Business Development Manager Photonic Integrated Circ @ ZEISS
+  + Business Development Manager (m/w/d) @ BOTEVO Building Solutions GmbH
+  + Business Development Manager (m/w/d) Vertrieb Supermärkte &  @ Biddle GmbH
+  + Senior Business Development Manager (m/w/d) @ Bayerische Hausbau Real Estate
+  + Senior Business Development Manager (m/f/d) PCB Technology @ Panasonic Industry Europe GmbH
+  + Sales & Business Development Manager Tree Care (w/m/d) @ Prinoth GmbH
+  + Leading Business Development Manager - Cloud & Software | Te @ NTT DATA
+  + Business Development Manager (m/w/d) @ REIKU GmbH Kabelschutzsysteme
+  + Business Development Manager (m/w/d) Commercial Shipping @ J.P. Sauer & Sohn Maschinenbau GmbH
+  + Business Development Manager Pharmazeutische Industrie (m/w/ @ Aug. Hedinger GmbH & Co. KG
+  + Senior Business Development Manager - Marktanalyse / Wirtsch @ Workwise GmbH
+  + Leading Business Development Manager - Cloud & Software | Pu @ NTT DATA
+  + Leading Business Development Manager - Cloud & Software | Ba @ NTT DATA
+  + Business Development Manager EMEA (m/w/d) @ Arrow Electronics, Inc.
+  + Sales Manager / Business Development Manager (m/w/d) kosmeti @ SGS proderm GmbH
+  + Business Development Manager für KI-Lösungen im Call-Center- @ Rhenus Office Systems GmbH
+  + Tender & Business Development Manager (m/w/d) @ Leopold Schäfer GmbH
+Fetching Adzuna [FR] 'sales+account+executive': ...
+  Found 50 entries
+  + ALTERNANCE Sales Account Executive F/H @ THALES
+  + Account Sales Executive - Transports H/F @ Atos
+  + Account Sales Executive - Transports (H/F) @ Forums Talents Handicap
+Fetching Adzuna [FR] 'head+of+sales': ...
+  Found 50 entries
+  + Head of sales H/F (CDI) @ LEA Recrutement
+  + Head of Sales France H/F (CDI) @ UPTOO
+  + Head of Sales & Marketing France H/F (CDI) @ Michael Page
+  + Head of Sales @ Mayday
+  + Head of Sales @ Smile Partner
+  + Head of Sales Destock @ Phenix
+  + Head Of Sales H/F @ Charly | Recrutement & Intérim
+  + Head of sales & business development @ Frnch
+Fetching Adzuna [FR] 'business+development+manager': ...
+  Found 50 entries
+  + Business Development Manager NUTANIX (H/F/X) @ TD SYNNEX
+  + Business Development Manager - Customer Veeam - Vmware (H/F/ @ TD SYNNEX
+  + Business Development Manager H/F @ Alstom
+  + Business Development Manager - Toulouse H/F @ Deliveroo
+  + Business Development Manager - Lyon H/F @ Deliveroo
+  + Senior Business Development Manager H/F (CDI) @ NEITHWORK
+  + Business Development Manager H/F (CDI) @ CSC Global
+  + Business Development Manager M - Defense H/F @ HP
+  + Business Development Manager (H/F) @ Innova Solutions
+  + Business Development Manager Arm Consumer Solutions H/F @ HP
+  + Business Development Manager - Account Manager H/F @ Innova Solutions
+Fetching Adzuna [NL] 'sales+account+executive': ...
+  Found 50 entries
+  + E-commerce manager @ WR.nl Solliciteren
+Fetching Adzuna [NL] 'head+of+sales': ...
+  Found 50 entries
+  + Head Of Sales @ nexos.ai
+  + Head of Sales Datacenter Services (APAC) @ RM Staffing B.V.
+  + Head of Sales Datacenter Services (Americas) @ RM Staffing B.V.
+  + Head of Sales Datacenter Services (Europe) @ RM Staffing B.V.
+  + Head of Sales Datacenter Services (Middle East & Africa) @ RM Staffing B.V.
+  + Head of Sales (m/f/d) Downstream Energy & New Fuels @ Mabanaft & Co
+  + Head of Design // tijdelijke vervanging @ POM Amsterdam
+Fetching Adzuna [NL] 'business+development+manager': ...
+  Found 50 entries
+  + Strategic Business Development Manager @ Bodycote Hardingscentrum BV
+  + EMEA Business Development Manager @ Arrow Electronics, Inc.
+  + Sales Manager @ Corendon Headoffice
+  + Business Development Manager im Verteidigungssektor (m/w/d) @ Bodycote Hardingscentrum BV
+  + Regional Sales Manager @ Bodycote Hardingscentrum BV
+  + Business Development Manager @ Nuvei
+  + Business Development Manager @ Byborre
+  + Business Development Manager @ Synsel Techniek
+  + Business Development Manager @ Linehub
+  + Business Development Manager @ Creative Clicks B.V.
+  + Business development manager @ Connectyou
+  + Business Development Manager @ Thermo Fisher Scientific
+Fetching Adzuna [BE] 'sales+account+executive': ...
+  Found 32 entries
+  + Talents4You - SaaS Sales Executive @ Talents4You
+Fetching Adzuna [BE] 'head+of+sales': ...
+  Found 40 entries
+  + Head of Sales Excellence @ HUDSON
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\scraper.py", line 581, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\scraper.py", line 573, in main
+    total += scrape_adzuna()
+             ~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\scraper.py", line 340, in scrape_adzuna
+    print(f"  + {title[:60]} @ {company_name}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2011' in position 22: character maps to <undefined>
+C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py:20: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+
+==================================================
+jhoo Scorer - 2026-04-06 16:36
+==================================================
+Loaded 550 avoid companies
+Loaded reference companies for scoring context
+Found 152 unscored jobs
+
+[1/152] Strategic Business Development Manager @ Bodycote Hardingscentrum BV
+  -> Score: 2/10 - This role is unlikely to be a good fit due to the company's industry (performanc
+[2/152] EMEA Business Development Manager @ Arrow Electronics, Inc.
+  -> Score: 2/10 - The role is listed as 'Business Development Manager' at a large, established cor
+[3/152] Sales Manager @ Corendon Headoffice
+  -> Score: 0/10 - This role is not a good fit due to multiple hard requirements not being met, inc
+[4/152] Business Development Manager im Verteidigungssektor (m/w/d) @ Bodycote Hardingscentrum BV
+  -> Score: 0/10 - This job is a poor fit due to multiple hard requirements not being met. The job 
+[5/152] Regional Sales Manager @ Bodycote Hardingscentrum BV
+  -> Score: 1/10 - This role is a poor fit due to the company's industry (performance metallurgy vs
+[6/152] Business Development Manager @ Nuvei
+  -> Score: 2/10 - The job requires hybrid work in Amsterdam, conflicting with the candidate's remo
+[7/152] Business Development Manager @ Byborre
+  -> Score: 0/10 - This role is a poor fit due to the required location in Amsterdam and the junior
+[8/152] Business Development Manager @ Synsel Techniek
+  -> Score: 1/10 - The job posting is in Dutch, violating the English-only requirement. The industr
+[9/152] Business Development Manager @ Linehub
+  -> Score: 1/10 - The job posting is written in Dutch, which is a hard requirement mismatch. While
+[10/152] Business Development Manager @ Creative Clicks B.V.
+  -> Score: 1/10 - The job requires relocation to Amsterdam and does not specify a base salary, mak
+[11/152] Business development manager @ Connectyou
+  -> Score: 3/10 - This role is for Business Development Manager, which is a target role for the ca
+[12/152] Business Development Manager @ Thermo Fisher Scientific
+  -> Score: 1/10 - This role is a poor fit due to the company being a large enterprise rather than 
+[13/152] Talents4You - SaaS Sales Executive @ Talents4You
+  -> Score: 3/10 - The job posting is for a Sales Executive role which may be too junior for the ca
+[14/152] Head of Sales Excellence @ HUDSON
+  -> Score: 0/10 - The job posting is for a Head of Sales Excellence at a publicly listed fashion h
+Traceback (most recent call last):
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 258, in <module>
+    score_unscored_jobs()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Chase\Documents\GitHub\jhoo\gemini_scorer.py", line 207, in score_unscored_jobs
+    print(f"[{i+1}/{len(jobs)}] {title} @ {company}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Chase\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2011' in position 27: character maps to <undefined>
+Done Mon 04/06/26 16:37:30.69 
