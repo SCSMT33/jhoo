@@ -190,7 +190,7 @@ function updateButton() {
 function flashButton() {
   if (!harvestBtn) return;
   harvestBtn.style.transition = "background-color 0.3s ease";
-  harvestBtn.style.background = "#3b82f6";
+  harvestBtn.style.background = "#ef4444";
   setTimeout(() => { harvestBtn.style.background = "#22c55e"; }, 300);
 }
 
