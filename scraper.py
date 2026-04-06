@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 from supabase import create_client
 import requests
 import feedparser
+import time
 
 load_dotenv()
 
@@ -51,6 +52,16 @@ SKIP_LOCATIONS = [
     "ethiopia", "tanzania", "uganda", "senegal", "cameroon",
     "france", "germany", "berlin", "munich", "hamburg", "frankfurt",
 ]
+
+MARKETING_TITLE_KEYWORDS = [
+    "marketing", "content", "social media", "copywriter", "brand",
+    "seo", "growth hacker",
+]
+
+
+def is_marketing_title(title: str) -> bool:
+    t = title.lower()
+    return any(kw in t for kw in MARKETING_TITLE_KEYWORDS)
 
 
 def posting_hash(url: str) -> str:
@@ -278,7 +289,10 @@ def scrape_adzuna():
         print("Adzuna: skipping (ADZUNA_APP_ID / ADZUNA_APP_KEY not set in .env)")
         return 0
 
-    countries = ["gb", "nl", "ie", "se", "dk", "es"]
+    countries = [
+        "gb", "de", "fr", "nl", "be", "at", "ch", "se", "dk", "es",
+        "it", "pl", "ie", "pt", "no", "fi", "cz", "ro", "hu",
+    ]
     search_terms = ["sales+account+executive", "head+of+sales", "business+development+manager"]
     saved = 0
     skipped = 0
@@ -326,6 +340,8 @@ def scrape_adzuna():
                     print(f"  + {title[:60]} @ {company_name}")
                 else:
                     skipped += 1
+
+            time.sleep(1)
 
     print(f"Adzuna: saved {saved}, skipped {skipped}")
     return saved
@@ -375,6 +391,165 @@ def scrape_wellfound():
     return saved
 
 
+def scrape_weworkremotely():
+    """Scrape We Work Remotely RSS for remote sales jobs."""
+    url = "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss"
+    print(f"Fetching: {url}")
+
+    saved = 0
+    skipped = 0
+
+    try:
+        feed = feedparser.parse(url)
+    except Exception as e:
+        print(f"  We Work Remotely fetch error: {e}")
+        return 0
+
+    entries = feed.entries[:100]
+    print(f"  Found {len(entries)} entries")
+
+    for entry in entries:
+        title = entry.get("title", "").strip()
+        if is_marketing_title(title):
+            skipped += 1
+            continue
+
+        company_name = (entry.get("author") or "").strip() or "Unknown"
+        apply_url = entry.get("link", "").strip()
+        description = strip_html(entry.get("summary", ""))
+
+        date_posted = None
+        if entry.get("published_parsed"):
+            import time as _time
+            date_posted = datetime.fromtimestamp(_time.mktime(entry.published_parsed), tz=timezone.utc)
+
+        result = save_job(title, company_name, "Remote", apply_url, description, "weworkremotely", date_posted)
+        if result == "saved":
+            saved += 1
+            print(f"  + {title[:60]} @ {company_name}")
+        else:
+            skipped += 1
+
+    print(f"We Work Remotely: saved {saved}, skipped {skipped}")
+    return saved
+
+
+def scrape_jobicy():
+    """Scrape Jobicy API for remote sales jobs across three role tags."""
+    tags = ["account+executive", "sales+manager", "business+development"]
+    headers = {"User-Agent": "jhoo-scraper/1.0"}
+
+    saved = 0
+    skipped = 0
+    seen_hashes = set()
+
+    for tag in tags:
+        url = f"https://jobicy.com/api/v2/remote-jobs?count=100&tag={tag}"
+        print(f"Fetching: {url}")
+
+        try:
+            resp = requests.get(url, timeout=10, headers=headers)
+            resp.raise_for_status()
+            data = resp.json()
+        except Exception as e:
+            print(f"  Jobicy [{tag}] fetch error: {e}")
+            continue
+
+        jobs = data.get("jobs", [])
+        print(f"  Found {len(jobs)} entries")
+
+        for job in jobs:
+            apply_url = (job.get("url") or "").strip()
+            if not apply_url:
+                skipped += 1
+                continue
+
+            h = posting_hash(apply_url)
+            if h in seen_hashes:
+                skipped += 1
+                continue
+            seen_hashes.add(h)
+
+            title = (job.get("jobTitle") or "").strip()
+            company_name = (job.get("companyName") or "").strip()
+            location = (job.get("jobGeo") or "Remote").strip()
+            description = strip_html(job.get("jobDescription") or "")
+
+            date_posted = None
+            raw_date = job.get("pubDate")
+            if raw_date:
+                try:
+                    date_posted = datetime.fromisoformat(str(raw_date).replace("Z", "+00:00"))
+                except Exception:
+                    pass
+
+            result = save_job(title, company_name, location, apply_url, description, "jobicy", date_posted)
+            if result == "saved":
+                saved += 1
+                print(f"  + {title[:60]} @ {company_name}")
+            else:
+                skipped += 1
+
+    print(f"Jobicy: saved {saved}, skipped {skipped}")
+    return saved
+
+
+def scrape_jobscollider():
+    """Scrape JobsCollider RSS for remote sales and BD jobs."""
+    rss_urls = [
+        "https://jobscollider.com/rss/jobs/sales",
+        "https://jobscollider.com/rss/jobs/business-development",
+    ]
+
+    saved = 0
+    skipped = 0
+    total_processed = 0
+
+    for rss_url in rss_urls:
+        if total_processed >= 100:
+            break
+
+        print(f"Fetching: {rss_url}")
+
+        try:
+            feed = feedparser.parse(rss_url)
+        except Exception as e:
+            print(f"  JobsCollider fetch error [{rss_url}]: {e}")
+            continue
+
+        entries = feed.entries
+        print(f"  Found {len(entries)} entries")
+
+        for entry in entries:
+            if total_processed >= 100:
+                break
+
+            title = entry.get("title", "").strip()
+            if is_marketing_title(title):
+                skipped += 1
+                continue
+
+            company_name = (entry.get("author") or "").strip() or "Unknown"
+            apply_url = entry.get("link", "").strip()
+            description = strip_html(entry.get("summary", ""))
+
+            date_posted = None
+            if entry.get("published_parsed"):
+                import time as _time
+                date_posted = datetime.fromtimestamp(_time.mktime(entry.published_parsed), tz=timezone.utc)
+
+            result = save_job(title, company_name, "Remote", apply_url, description, "jobscollider", date_posted)
+            total_processed += 1
+            if result == "saved":
+                saved += 1
+                print(f"  + {title[:60]} @ {company_name}")
+            else:
+                skipped += 1
+
+    print(f"JobsCollider: saved {saved}, skipped {skipped}")
+    return saved
+
+
 def main():
     print(f"\n{'='*50}")
     print(f"jhoo Scraper - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
@@ -388,6 +563,12 @@ def main():
     total += scrape_remoteok()
     print()
     total += scrape_wellfound()
+    print()
+    total += scrape_weworkremotely()
+    print()
+    total += scrape_jobicy()
+    print()
+    total += scrape_jobscollider()
     print()
     total += scrape_adzuna()
 
