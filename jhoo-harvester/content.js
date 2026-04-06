@@ -6,7 +6,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 let capturedJobs = [];
 let harvestBtn = null;
-let captureTimeout = null;
+let debounceTimer = null;
 let lastCapturedUrl = null;
 
 // ── HASH ──────────────────────────────────────────────────────────────────────
@@ -17,27 +17,43 @@ function hashUrl(url) {
   }, 0)).toString();
 }
 
+// ── URL ───────────────────────────────────────────────────────────────────────
+function getCurrentJobUrl() {
+  // LinkedIn job detail pages: /jobs/view/1234567890/
+  const viewMatch = window.location.pathname.match(/\/jobs\/view\/(\d+)/);
+  if (viewMatch) return `https://www.linkedin.com/jobs/view/${viewMatch[1]}/`;
+
+  // LinkedIn search with currentJobId param: ?currentJobId=1234567890
+  const params = new URLSearchParams(window.location.search);
+  const jobId = params.get("currentJobId");
+  if (jobId) return `https://www.linkedin.com/jobs/view/${jobId}/`;
+
+  // Fallback: full href (unique per job even if ugly)
+  return window.location.href;
+}
+
 // ── SELECTORS ─────────────────────────────────────────────────────────────────
 function getText(selectors, root = document) {
   for (const sel of selectors) {
-    const el = root.querySelector(sel);
-    if (el && el.innerText.trim()) return el.innerText.trim();
+    try {
+      const el = root.querySelector(sel);
+      if (el && el.innerText.trim()) return el.innerText.trim();
+    } catch (_) {}
   }
   return "";
 }
 
 function extractJob() {
-  const applyUrl = window.location.href.split('?')[0];
+  const applyUrl = getCurrentJobUrl();
 
-  // Avoid re-capturing the same URL
+  // Only skip if this is the exact same job we just captured
   if (applyUrl === lastCapturedUrl) return null;
 
   const title = getText([
     ".job-details-jobs-unified-top-card__job-title h1",
     ".jobs-unified-top-card__job-title h1",
-    ".t-24.t-bold.jobs-unified-top-card__job-title",
-    "h1.job-title",
     ".job-details-jobs-unified-top-card__job-title",
+    ".t-24.t-bold",
     "h1"
   ]);
 
@@ -66,28 +82,25 @@ function extractJob() {
     "#job-details"
   ]);
 
-  // Try to find a posted date — look for elements mentioning "ago" or a date
+  // Skip if we haven't loaded a real job yet
+  if (!title || !company_name) return null;
+
+  // Parse relative posted date
   let date_posted = null;
-  const allText = document.querySelectorAll(
-    ".jobs-unified-top-card__posted-date, .job-details-jobs-unified-top-card__primary-description-container span, .tvm__text"
+  const dateEls = document.querySelectorAll(
+    ".jobs-unified-top-card__posted-date, .tvm__text, .job-details-jobs-unified-top-card__primary-description-container span"
   );
-  for (const el of allText) {
+  for (const el of dateEls) {
     const t = el.innerText.trim();
-    if (/\d+\s*(hour|day|week|month)s?\s*ago/i.test(t) || /posted/i.test(t)) {
-      // Parse relative date to ISO
-      const now = new Date();
-      const match = t.match(/(\d+)\s*(hour|day|week|month)s?\s*ago/i);
-      if (match) {
-        const n = parseInt(match[1]);
-        const unit = match[2].toLowerCase();
-        const ms = { hour: 36e5, day: 864e5, week: 6048e5, month: 2592e6 }[unit] || 0;
-        date_posted = new Date(now - n * ms).toISOString();
-      }
+    const match = t.match(/(\d+)\s*(hour|day|week|month)s?\s*ago/i);
+    if (match) {
+      const n = parseInt(match[1]);
+      const unit = match[2].toLowerCase();
+      const ms = { hour: 36e5, day: 864e5, week: 6048e5, month: 2592e6 }[unit] || 0;
+      date_posted = new Date(Date.now() - n * ms).toISOString();
       break;
     }
   }
-
-  if (!title || !applyUrl) return null;
 
   return { title, company_name, location, raw_description, apply_url: applyUrl, date_posted };
 }
@@ -97,14 +110,10 @@ function tryCapture() {
   const job = extractJob();
   if (!job) return;
 
-  // Deduplicate by apply_url within session
-  const exists = capturedJobs.some(j => j.apply_url === job.apply_url);
-  if (exists) return;
-
   capturedJobs.push(job);
   lastCapturedUrl = job.apply_url;
   updateButton();
-  console.log(`[jhoo] Captured: ${job.title} @ ${job.company_name}`);
+  console.log(`[jhoo] Captured #${capturedJobs.length}: ${job.title} @ ${job.company_name}`);
 }
 
 // ── BUTTON ────────────────────────────────────────────────────────────────────
@@ -139,15 +148,15 @@ function updateButton() {
   harvestBtn.textContent = `⚡ jhoo: ${capturedJobs.length} captured`;
 }
 
-function setButtonState(text, color, duration) {
+function setButtonState(text, color, resetAfterMs) {
   if (!harvestBtn) return;
   harvestBtn.textContent = text;
   harvestBtn.style.background = color;
-  if (duration) {
+  if (resetAfterMs) {
     setTimeout(() => {
       harvestBtn.style.background = "#22c55e";
       updateButton();
-    }, duration);
+    }, resetAfterMs);
   }
 }
 
@@ -206,9 +215,9 @@ async function harvest() {
 // ── OBSERVER ──────────────────────────────────────────────────────────────────
 function startObserver() {
   const observer = new MutationObserver(() => {
-    // Debounce: wait 1s after last DOM change before capturing
-    clearTimeout(captureTimeout);
-    captureTimeout = setTimeout(tryCapture, 1000);
+    // Debounce: wait 1500ms after last mutation before attempting capture
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(tryCapture, 1500);
   });
 
   observer.observe(document.body, {
@@ -222,8 +231,8 @@ function init() {
   if (document.getElementById("jhoo-harvest-btn")) return;
   harvestBtn = createButton();
   startObserver();
-  // Attempt capture on initial page load too
-  setTimeout(tryCapture, 1500);
+  // Attempt initial capture in case a job is already showing
+  setTimeout(tryCapture, 2000);
 }
 
 if (document.readyState === "loading") {
