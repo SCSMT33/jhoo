@@ -23,7 +23,7 @@ from groq import Groq
 load_dotenv()
 
 # ── CONFIG ──────────────────────────────────────────────────────────────────
-SUPABASE_URL = os.environ["SUPABASE_URL"]h
+SUPABASE_URL = os.environ["SUPABASE_URL"]
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
