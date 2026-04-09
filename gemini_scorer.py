@@ -23,7 +23,7 @@ from groq import Groq
 load_dotenv()
 
 # ── CONFIG ──────────────────────────────────────────────────────────────────
-SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_URL = os.environ["SUPABASE_URL"]h
 SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
@@ -46,8 +46,7 @@ Notable achievements:
 - Built sales process from scratch at multiple companies
 - MBA, Montana USA 2017
 
-Target roles: Account Executive, Sales Manager, Head of Sales, Sales Director,
-International Sales Manager, Business Development Manager, Sales Lead
+Target roles: Account Executive, Sales Manager, Head of Sales, Sales Director, Business Development Manager, Business Development Director, VP Sales, Commercial Director, Country Manager, Revenue Manager, Partnerships Manager, Channel Manager, International Sales Manager, GTM Lead, Growth Manager
 
 Ideal company: 10-150 person SaaS or AI startup, remote-first, English only,
 European HQ or global remote, base salary + commission compensation
@@ -126,11 +125,12 @@ SCORING RULES:
 - Score 5-6 if: decent fit but missing key criteria
 - Score 7-8 if: good fit, matches profile well
 - Score 9-10 if: excellent fit, similar to reference companies, right level, right comp
+IMPORTANT: Do NOT penalise a job for not listing a salary. Most legitimate companies do not include salary in job postings. Only score 0 for compensation if the posting explicitly states commission-only, no base salary, or OTE-only. Absence of salary information must have zero negative impact on the score.
 
 Return this exact JSON:
 {{
   "fit_score": <integer 0-10>,
-  "score_summary": "<2 sentences max: why it fits or doesn't>",
+  "score_summary": "<2 sentences max: focus on role fit, company fit, and remote/language requirements - do not mention salary unless it is explicitly commission-only>",
   "language_flag": <true if non-English language required, else false>,
   "similar_company_flag": <true if similar to reference companies, else false>
 }}
