@@ -46,7 +46,10 @@ Notable achievements:
 - Built sales process from scratch at multiple companies
 - MBA, Montana USA 2017
 
-Target roles: Account Executive, Sales Manager, Head of Sales, Sales Director, Business Development Manager, Business Development Director, VP Sales, Commercial Director, Country Manager, Revenue Manager, Partnerships Manager, Channel Manager, International Sales Manager, GTM Lead, Growth Manager
+Target roles: Account Executive, Sales Manager, Head of Sales, Sales Director,
+Business Development Manager, Business Development Director, VP Sales,
+Commercial Director, Country Manager, Revenue Manager, Partnerships Manager,
+Channel Manager, International Sales Manager, GTM Lead, Growth Manager
 
 Ideal company: 10-150 person SaaS or AI startup, remote-first, English only,
 European HQ or global remote, base salary + commission compensation
@@ -125,7 +128,11 @@ SCORING RULES:
 - Score 5-6 if: decent fit but missing key criteria
 - Score 7-8 if: good fit, matches profile well
 - Score 9-10 if: excellent fit, similar to reference companies, right level, right comp
-IMPORTANT: Do NOT penalise a job for not listing a salary. Most legitimate companies do not include salary in job postings. Only score 0 for compensation if the posting explicitly states commission-only, no base salary, or OTE-only. Absence of salary information must have zero negative impact on the score.
+
+IMPORTANT: Do NOT penalise a job for not listing a salary. Most legitimate companies do not
+include salary in job postings. Only score 0 for compensation if the posting explicitly states
+commission-only, no base salary, or OTE-only. Absence of salary information should have zero
+negative impact on the score.
 
 Return this exact JSON:
 {{
