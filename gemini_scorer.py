@@ -126,10 +126,18 @@ Description:
 
 SCORING RULES:
 - Score 0 if: commission only, non-English required, must relocate, field sales, Africa-based
-- Score 1-4 if: poor fit (wrong industry, wrong comp model, or entry-level junior roles like SDR/BDR with no management component). Do NOT score low just because a title says "Sales Executive" instead of "Sales Manager" — Sales Executive, Account Executive, Enterprise Sales Executive are all perfectly good roles for this candidate. Only penalise seniority if the role is clearly junior/entry-level.
-- Score 5-6 if: decent fit but missing key criteria
-- Score 7-8 if: good fit, matches profile well
-- Score 9-10 if: excellent fit, similar to reference companies, right level, right comp
+- Score 1-3 if: clearly wrong fit — wrong function (not sales/BD/growth), or entry-level SDR/BDR role requiring only 0-2 years experience with no leadership component
+- Score 4-5 if: standard individual contributor AE or sales executive role at a mid-to-large company, no leadership responsibility, but meets remote/language/comp requirements
+- Score 6-7 if: senior AE, lead AE, or IC role with meaningful scope, or standard AE at a strong startup matching the ideal company profile
+- Score 8-9 if: sales leadership role (Head of Sales, Sales Director, VP Sales, Sales Manager with team), or first sales hire / founding AE at a strong startup, or player-coach role owning both sales and CS
+- Score 10 if: perfect match — startup sales lead role, full ownership of revenue, right company size, right industry, remote, English, base+commission
+ROLE SCORING GUIDE (apply alongside other factors):
+- Pure junior SDR/BDR (0-2 yrs, no mgmt): score 1-2
+- Standard AE / Sales Executive (no leadership): score 4-6 depending on company fit  
+- Senior AE / Enterprise AE: score 6-7
+- First sales hire / founding sales role: score 8-9
+- Head of Sales / Sales Director / VP Sales: score 8-10
+- Head of Growth owning sales+CS at startup: score 8-9
 
 IMPORTANT: Do NOT penalise a job if the stated experience requirement (e.g. "2-5 years") is lower than the candidate's actual experience. An overqualified candidate can always apply — this is their choice to make. A role asking for 2-5 years experience is still a valid opportunity for someone with 11 years if the responsibilities and scope match.
 IMPORTANT: Do NOT penalise a job for not listing a salary. Most legitimate companies do not
