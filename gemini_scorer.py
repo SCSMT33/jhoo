@@ -46,13 +46,12 @@ Notable achievements:
 - Built sales process from scratch at multiple companies
 - MBA, Montana USA 2017
 
-Target roles: Account Executive, Sales Manager, Head of Sales, Sales Director,
-Business Development Manager, Business Development Director, VP Sales,
+Target roles: Account Executive, Sales Executive, Enterprise Sales Executive, Sales Manager, Head of Sales, Sales Director,
+Business Development Manager, Business Development Executive, Business Development Director, VP Sales,
 Commercial Director, Country Manager, Revenue Manager, Partnerships Manager,
 Channel Manager, International Sales Manager, GTM Lead, Growth Manager
 
-Ideal company: 10-150 person SaaS or AI startup, remote-first, English only,
-European HQ or global remote, base salary + commission compensation
+Ideal company: 10-200 person company, remote-first, English only, European HQ or global remote, base salary + commission compensation. Industries include SaaS, AI, tech, IT services, managed services, consulting, data, EdTech, climate tech, accessibility — Chase can sell any complex B2B solution, not just software.
 
 NOTE: Chase is happy with any full-cycle sales role including Sales Executive, Account Executive, Enterprise Sales Executive, Business Development Executive, Head of Growth, Head of Sales, Growth Lead, or similar. Do not require "Manager" or "Director" in the title — any individual contributor closing role or player-coach role is excellent. Roles at early-stage startups where one person owns both sales and customer success (like "Head of Growth") are a great fit given Chase's background building from zero.
 
