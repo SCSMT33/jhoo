@@ -54,6 +54,8 @@ Channel Manager, International Sales Manager, GTM Lead, Growth Manager
 Ideal company: 10-150 person SaaS or AI startup, remote-first, English only,
 European HQ or global remote, base salary + commission compensation
 
+NOTE: Chase is happy with any full-cycle sales role including Sales Executive, Account Executive, Enterprise Sales Executive, Business Development Executive. Do not require "Manager" or "Director" in the title — any individual contributor closing role is excellent.
+
 Hard requirements:
 - Must offer base salary + commission (commission-only = score 0)
 - Must be remote or remote-friendly from Romania/Europe
@@ -124,7 +126,7 @@ Description:
 
 SCORING RULES:
 - Score 0 if: commission only, non-English required, must relocate, field sales, Africa-based
-- Score 1-4 if: poor fit (wrong level, wrong industry, wrong comp model)
+- Score 1-4 if: poor fit (wrong industry, wrong comp model, or entry-level junior roles like SDR/BDR with no management component). Do NOT score low just because a title says "Sales Executive" instead of "Sales Manager" — Sales Executive, Account Executive, Enterprise Sales Executive are all perfectly good roles for this candidate. Only penalise seniority if the role is clearly junior/entry-level.
 - Score 5-6 if: decent fit but missing key criteria
 - Score 7-8 if: good fit, matches profile well
 - Score 9-10 if: excellent fit, similar to reference companies, right level, right comp
