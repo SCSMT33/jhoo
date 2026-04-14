@@ -71,6 +71,11 @@ HARD_NO_REASONS = [
     "french required", "german required", "spanish required",
     "must be based in london", "must relocate", "field sales",
     "must be fluent in french", "must be fluent in german",
+    "excellent german", "fluent in german", "german speaking",
+    "dutch required", "fluent in dutch",
+    "excellent french", "fluent in french",
+    "arabic required", "fluent in arabic",
+    "residence in germany", "based in germany", "reside in germany",
 ]
 
 # ── INIT ─────────────────────────────────────────────────────────────────────
@@ -122,10 +127,10 @@ Company: {job.get('company_name', '')}
 Location: {job.get('location', '')}
 Salary: {job.get('salary', 'not listed')}
 Description:
-{job.get('raw_description', '')[:3000]}
+{job.get('raw_description', '')[:6000]}
 
 SCORING RULES:
-- Score 0 if: commission only, non-English required, must relocate, field sales, Africa-based
+- Score 0 if: commission only, must relocate, field sales, Africa-based, OR the role requires proficiency or fluency in ANY language other than English (e.g. German, French, Spanish, Dutch, Arabic, etc.) — even if English is also listed. Any bilingual requirement = score 0.
 - Score 1-3 if: clearly wrong fit — wrong function (not sales/BD/growth), or entry-level SDR/BDR role requiring only 0-2 years experience with no leadership component
 - Score 4-5 if: standard individual contributor AE or sales executive role at a mid-to-large company, no leadership responsibility, but meets remote/language/comp requirements
 - Score 6-7 if: senior AE, lead AE, or IC role with meaningful scope, or standard AE at a strong startup matching the ideal company profile
@@ -133,7 +138,7 @@ SCORING RULES:
 - Score 10 if: perfect match — startup sales lead role, full ownership of revenue, right company size, right industry, remote, English, base+commission
 ROLE SCORING GUIDE (apply alongside other factors):
 - Pure junior SDR/BDR (0-2 yrs, no mgmt): score 1-2
-- Standard AE / Sales Executive (no leadership): score 4-6 depending on company fit  
+- Standard AE / Sales Executive (no leadership): score 4-6 depending on company fit
 - Senior AE / Enterprise AE: score 6-7
 - First sales hire / founding sales role: score 8-9
 - Head of Sales / Sales Director / VP Sales: score 8-10
